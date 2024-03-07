@@ -105,15 +105,15 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   availability_zones = local.azs
   multi_az           = var.multi_az
 
-  version              = local.version
-  aws_subnet_ids       = join(",", concat(module.vpc.public_subnets, module.vpc.private_subnets))
+  version = local.version
+  # aws_subnet_ids       = join(",", concat(module.vpc.public_subnets, module.vpc.private_subnets))
+  machine_cidr         = local.vpc_cidr
   worker_disk_size     = 300
   compute_machine_type = "m5.xlarge"
   # autoscaling_enabled         = true
   # min_replicas                = 3
   # max_replicas                = 6
   replicas                    = 3
-  ec2_metadata_http_tokens    = "required"
   default_mp_labels           = { "MachinePool" = "core" }
   disable_workload_monitoring = true
 
@@ -202,30 +202,30 @@ resource "aws_secretsmanager_secret_version" "rosa_hcp" {
 }
 
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
-
-  name = local.name
-  cidr = local.vpc_cidr
-
-  azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
-
-  enable_nat_gateway      = true
-  single_nat_gateway      = var.multi_az
-  enable_dns_hostnames    = true
-  enable_dns_support      = true
-  map_public_ip_on_launch = true
-
-  public_subnet_tags = {
-    "kubernetes.io/role/elb" = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-elb" = 1
-  }
-
-  tags = var.tags
-}
+# module "vpc" {
+# source  = "terraform-aws-modules/vpc/aws"
+# version = "~> 5.0"
+# 
+# name = local.name
+# cidr = local.vpc_cidr
+# 
+# azs             = local.azs
+# private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+# public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
+# 
+# enable_nat_gateway      = true
+# single_nat_gateway      = var.multi_az
+# enable_dns_hostnames    = true
+# enable_dns_support      = true
+# map_public_ip_on_launch = true
+# 
+# public_subnet_tags = {
+# "kubernetes.io/role/elb" = 1
+# }
+# 
+# private_subnet_tags = {
+# "kubernetes.io/role/internal-elb" = 1
+# }
+# 
+# tags = var.tags
+# }
