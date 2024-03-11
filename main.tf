@@ -45,11 +45,11 @@ locals {
   path = coalesce(var.path, "/")
 
   sts_roles = {
-    role_arn         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Installer-Role",
-    support_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Support-Role",
+    role_arn         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-HCP-ROSA-Installer-Role",
+    support_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-HCP-ROSA-Support-Role",
     instance_iam_roles = {
 
-      worker_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Worker-Role"
+      worker_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-HCP-ROSA-Worker-Role"
     },
 
     operator_role_prefix = var.operator_role_prefix,
