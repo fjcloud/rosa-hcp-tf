@@ -74,10 +74,9 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   aws_billing_account_id = local.account_id
 
   availability_zones = local.azs
-  multi_az           = var.multi_az
 
   version = local.version
-  aws_subnet_ids       = join(",", concat(module.vpc.public_subnets, module.vpc.private_subnets))
+  aws_subnet_ids       = concat(list(module.vpc.public_subnets), list(module.vpc.private_subnets))
   machine_cidr         = local.vpc_cidr
   compute_machine_type = "m5.xlarge"
   replicas                    = 3
@@ -86,26 +85,15 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
     rosa_creator_arn = data.aws_caller_identity.current.arn
   }
 
-  admin_credentials = {
-    username = var.username,
-    password = data.aws_secretsmanager_secret_version.admin_password_version.secret_string
-  }
-
   wait_for_create_complete = true
   destroy_timeout          = 60
 
-  depends_on = [module.create_account_roles]
 }
 
 resource "rhcs_cluster_wait" "rosa_cluster" {
   cluster = rhcs_cluster_rosa_hcp.rosa_hcp_cluster.id
   # timeout in minutes
   timeout = 60
-}
-
-data "rhcs_rosa_operator_roles" "operator_roles" {
-  operator_role_prefix = var.operator_role_prefix
-  account_role_prefix  = var.account_role_prefix
 }
 
 
