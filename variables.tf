@@ -14,6 +14,11 @@ variable "operator_role_prefix" {
   default = "tf-rosa"
 }
 
+variable "account_role_prefix" {
+  type    = string
+  default = "florian"
+}
+
 variable "oidc_config_id" {
   type    = string
   default = ""
