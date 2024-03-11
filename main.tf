@@ -45,15 +45,15 @@ locals {
   path = coalesce(var.path, "/")
 
   sts_roles = {
-    role_arn         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-hcp-rosa-installer-role",
-    support_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-hcp-rosa-support-role",
+    role_arn         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Installer-Role",
+    support_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Support-Role",
     instance_iam_roles = {
 
-      worker_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.account_role_prefix}-hcp-rosa-worker-role"
+      worker_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ManagedOpenShift-HCP-ROSA-Worker-Role"
     },
 
     operator_role_prefix = var.operator_role_prefix,
-    oidc_config_id       = module.oidc_config.id
+    oidc_config_id       = var.oidc_config.id
   }
 
   name   = var.cluster_name
@@ -64,18 +64,6 @@ locals {
 
   vpc_cidr = var.vpc_cidr
   azs      = slice(data.aws_availability_zones.available.names, 0, 1)
-}
-
-# Create managed OIDC config
-module "oidc_config" {
-  token                = var.token
-  url                  = var.url
-  source               = "./oidc_provider"
-  managed              = true
-  operator_role_prefix = var.operator_role_prefix
-  account_role_prefix  = var.account_role_prefix
-  tags                 = var.tags
-  path                 = var.path
 }
 
 resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
