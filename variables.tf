@@ -11,12 +11,12 @@ variable "url" {
 
 variable "operator_role_prefix" {
   type    = string
-  default = "rosa-hcp-tf"
+  default = "tf-rosa"
 }
 
-variable "account_role_prefix" {
+variable "oidc_config_id" {
   type    = string
-  default = "rosa-hcp-tf"
+  default = ""
 }
 
 variable "cluster_name" {
