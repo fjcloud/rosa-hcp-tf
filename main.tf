@@ -76,7 +76,7 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   availability_zones = local.azs
 
   version = local.version
-  aws_subnet_ids       = concat(list(module.vpc.public_subnets), list(module.vpc.private_subnets))
+  aws_subnet_ids       = concat(module.vpc.public_subnets, module.vpc.private_subnets)
   machine_cidr         = local.vpc_cidr
   compute_machine_type = "m5.xlarge"
   replicas                    = 3
