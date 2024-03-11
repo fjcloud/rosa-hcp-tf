@@ -53,7 +53,7 @@ locals {
     },
 
     operator_role_prefix = var.operator_role_prefix,
-    oidc_config_id       = var.oidc_config.id
+    oidc_config_id       = var.oidc_config_id
   }
 
   name   = var.cluster_name
