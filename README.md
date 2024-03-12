@@ -17,7 +17,7 @@ then run
 
 ```bash
 rosa create operator-roles -m auto --hosted-cp --prefix tf-rosa --oidc-config-id $TF_VAR_oidc_config_id --role-arn arn:aws:iam::034313440371:role/florian-HCP-ROSA-Installer-Role
-rosa create oidc-provider -m auto -y --oidc-config-id $OIDC_CONFIG_ID
+rosa create oidc-provider -m auto -y --oidc-config-id $TF_VAR_oidc_config_id
 terraform init
 terraform apply --auto-approved
 ```
