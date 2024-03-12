@@ -79,7 +79,7 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   aws_subnet_ids       = concat(module.vpc.public_subnets, module.vpc.private_subnets)
   machine_cidr         = local.vpc_cidr
   compute_machine_type = "m5.xlarge"
-  replicas                    = 3
+  replicas                    = 2
 
   properties = {
     rosa_creator_arn = data.aws_caller_identity.current.arn
