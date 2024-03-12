@@ -10,15 +10,14 @@ Provide OCM Authentication Token that you can get from [here](https://console.re
 
 ```bash
 export TF_VAR_token=...
+export TF_VAR_oidc_config_id=$(rosa create oidc-config -m auto -y -o json | jq -r .id)
 ```
 
 then run 
 
 ```bash
+rosa create operator-roles -m auto --hosted-cp --prefix tf-rosa --oidc-config-id $TF_VAR_oidc_config_id --role-arn arn:aws:iam::034313440371:role/florian-HCP-ROSA-Installer-Role
+rosa create oidc-provider -m auto -y --oidc-config-id $OIDC_CONFIG_ID
 terraform init
 terraform apply --auto-approved
 ```
-
-ROSA cluster Admin user: cluster-admin
-
-Get cluster-admin user password: `aws secretsmanager get-secret-value --secret-id <output.rosa_admin_password_secret_name> --region $AWS_REGION --query "SecretString" --output text`
